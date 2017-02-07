@@ -33,6 +33,17 @@ class ipset_updater:
                 second_list.append(i)
         return second_list
 
+    def cleanup_duplicate_addresses(self, records):
+        known = list()
+        for i in records:
+            found = False
+            for j in known:
+                if i.address == j.address and i.protocol == j.protocol and i.port == j.port:
+                    found = True
+            if not found:
+                known.append(i)
+        return known
+
     # load config
     def load_config(self):
         config=None
@@ -343,6 +354,7 @@ class ipset_updater:
             ipset_records  = self.generate_commands(i, setname, family="v4")
             
             settype = self.check_records_for_type(ipset_records)
+            ipset_records = self.cleanup_duplicate_addresses(ipset_records)
 
             # skip sets that failed to update
             if len(ipset_records) == 0:
@@ -381,8 +393,9 @@ class ipset_updater:
             ipset_records  = self.generate_commands(i, setname, family="v6")
             
             settype = self.check_records_for_type(ipset_records)
+            ipset_records = self.cleanup_duplicate_addresses(ipset_records)
             
-            self.write_header(temporary_file.file, self.generate_file_header(setname, settype=settype))
+            self.write_header(temporary_file.file, self.generate_file_header(setname, family="inet6", settype=settype))
             
             for j in ipset_records:
                 try:
