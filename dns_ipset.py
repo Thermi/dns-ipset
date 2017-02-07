@@ -450,4 +450,3 @@ class ipset_record():
 if __name__ == '__main__':
     updater = ipset_updater()
     updater.run()
-       
