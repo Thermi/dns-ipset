@@ -101,7 +101,8 @@ class ipset_updater:
         for i in sets: 
             for j in i['FQDNs']:
                 try:
-                    print ("Resolving {}".format(j["FQDN"]))
+                    if self.verbose:
+                        print ("Resolving {}".format(j["FQDN"]))
                     v4, v6 = self.resolve_name(j['FQDN'])
                     v4 = self.unify(v4)
                     v6 = self.unify(v6)
@@ -230,11 +231,21 @@ class ipset_updater:
             exit(2)
 
         # actually resolve stuff
+        if self.verbose:
+            print ("Starting to resolve FQDNs.")
+
         self.start_resolving()
-        # write the result to the tempfile
         
-        # TODO: Write method to load new sets
-        return self.load_new_sets()
+        if self.verbose:
+            print ("Finished resolving the FQDNs.")
+
+        if self.verbose:
+            print ("Starting to update the ipsets.")
+        
+        self.load_new_sets()
+
+        if self.verbose:
+            print ("Finished updating ipsets.")
         
             
             
