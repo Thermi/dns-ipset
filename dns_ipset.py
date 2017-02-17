@@ -432,9 +432,9 @@ class ipset_updater:
             self.reset_file_descriptor(temporary_file.file)
                 
         
-        if verbose:
+        if self.verbose:
             print ("Loaded {} new IPs into the sets".format(number_of_ips))
-        
+
         return True
     
 class ipset_record():
