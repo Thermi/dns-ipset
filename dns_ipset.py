@@ -349,7 +349,7 @@ class ipset_updater:
     def load_new_sets(self):
         # create a temporary file that we can use to store the new sets.
         temporary_file = tempfile.NamedTemporaryFile()
-        
+        number_of_ips = 0
         # iterate over all sets, based on their FQDNs
         for i in self.configuration:
             temporary_file.file.seek(0)
@@ -370,6 +370,7 @@ class ipset_updater:
             # skip sets that failed to update
             if len(ipset_records) == 0:
                 continue
+            number_of_ips += len(ipset_records)
             # check all the records for what type is actually required (just IPs or 
             
             # we do IPv4 first.
@@ -430,6 +431,9 @@ class ipset_updater:
             self.destroy_set(setname)
             self.reset_file_descriptor(temporary_file.file)
                 
+        
+        if verbose:
+            print ("Loaded {} new IPs into the sets".format(number_of_ips))
         
         return True
     
