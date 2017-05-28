@@ -224,11 +224,11 @@ class ipset_updater:
         # load the config
        
         if not self.load_config():
-            exit(1)
+            sys.exit(1)
             
         if not self.validate_config():
             eprint("Failed to validate the config.\n")
-            exit(2)
+            sys.exit(2)
 
         # actually resolve stuff
         if self.verbose:
